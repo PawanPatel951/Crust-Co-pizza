@@ -1,5 +1,4 @@
-
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -11,15 +10,36 @@ import Navbar from "./components/layout/Navbar";
 import HeroSection from "./components/home/HeroSection";
 import FeaturedPizzas from "./components/home/FeaturedPizzas";
 import OffersSection from "./components/home/OffersSection";
-import About from "./pages/About";
 import TestimonialsSection from "./components/home/TestimonialsSection";
-import Contact from "./pages/Contact";
-import Menu from "./pages/Menu";
-import NotFound from "./pages/NotFound";
 import Footer from "./components/layout/Footer";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import OrderSuccess from "./pages/OrderSuccess";
+
+// Load below-the-fold sections separately
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+
+// Load other pages only when needed
+const Menu = lazy(() => import("./pages/Menu"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const OrderSuccess = lazy(() => import("./pages/OrderSuccess"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+function PageLoader() {
+  return (
+    <div
+      className="flex min-h-[45vh] items-center justify-center bg-[#fff7e8]"
+      role="status"
+      aria-label="Loading page"
+    >
+      <div className="flex flex-col items-center gap-3">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#d9a441]/30 border-t-[#7d2027]" />
+        <p className="text-sm font-semibold text-[#766861]">
+          Preparing something delicious...
+        </p>
+      </div>
+    </div>
+  );
+}
 
 function Home() {
   return (
@@ -27,9 +47,16 @@ function Home() {
       <HeroSection />
       <FeaturedPizzas />
       <OffersSection />
-      <About />
+
+      <Suspense fallback={<div className="min-h-24" />}>
+        <About />
+      </Suspense>
+
       <TestimonialsSection />
-      <Contact />
+
+      <Suspense fallback={<div className="min-h-24" />}>
+        <Contact />
+      </Suspense>
     </main>
   );
 }
@@ -64,14 +91,16 @@ function AppLayout() {
       <ScrollHandler />
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/menu" element={<Menu />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/order-success" element={<OrderSuccess />} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
 
       <Footer />
     </>

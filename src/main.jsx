@@ -7,10 +7,10 @@ import "aos/dist/aos.css";
 import { CartProvider } from "./context/CartContext";
 
 AOS.init({
-  duration: 800,
+  duration: 500,
   once: true,
-  offset: 80,
-  easing: "ease-out-cubic",
+  offset: 60,
+  easing: "ease-out",
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
