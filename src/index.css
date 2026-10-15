@@ -1,0 +1,77 @@
+
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #7d2027;
+  --color-brand-dark: #59171d;
+  --color-gold: #d9a441;
+  --color-cream: #fff7e8;
+  --color-ink: #30221e;
+
+  --font-display: "Playfair Display", serif;
+  --font-sans: "DM Sans", sans-serif;
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  margin: 0;
+  font-family: "DM Sans", sans-serif;
+  background: #fff7e8;
+  color: #30221e;
+}
+
+/* Scroll Reveal Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating Pizza Animation */
+@keyframes floatPizza {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* Reusable Animation Classes */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out both;
+  }
+
+  .animate-float-pizza {
+    animation: floatPizza 4s ease-in-out infinite;
+  }
+}
+
+/* Accessibility: Reduce motion when requested */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
